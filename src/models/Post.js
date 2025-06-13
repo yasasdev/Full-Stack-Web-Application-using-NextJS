@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 
-const { Schema } = mongoose;
-
-const postSchema = new Schema(
+const PostSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -12,7 +10,7 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
-    img: {
+    image: {
       type: String,
       required: true,
     },
@@ -28,4 +26,7 @@ const postSchema = new Schema(
   { timestamps: true } // Automatically manage createdAt and updatedAt fields
 );
 
-export default mongoose.model("Post", userSchema);
+// Check if model exists before creating it
+const Post = mongoose.models.Post || mongoose.model("Post", PostSchema);
+
+export default Post;
