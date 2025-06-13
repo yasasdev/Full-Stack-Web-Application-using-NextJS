@@ -1,13 +1,44 @@
 import React from "react";
 import styles from "./page.module.css";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 
-const BlogPost = () => {
+// Define the type for the params
+interface BlogPostParams {
+  params: {
+    id: string;
+  };
+}
+
+// Define the type for the post data
+interface PostData {
+  id: number;
+  title: string;
+  body: string;
+  userId: number;
+}
+
+async function getData(id: string): Promise<PostData> {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+    cache: "no-store", // Disable caching to always fetch fresh data
+  });
+
+  if (!res.ok) {
+    return notFound(); // Return a 404 page if the post is not found
+  }
+
+  return res.json();
+}
+
+// Make the component async and properly type the params
+const BlogPost = async ({ params }: BlogPostParams) => {
+  const data = await getData(params.id);
+  
   return (
     <div className={styles.container}>
       <div className={styles.top}>
         <div className={styles.info}>
-          <h1 className={styles.title}>Lorem Ipsum is simply dummy</h1>
+          <h1 className={styles.title}>{data.title}</h1>
           <p className={styles.desc}>
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry. Lorem Ipsum has been the industry's standard dummy text
@@ -25,11 +56,11 @@ const BlogPost = () => {
           </div>
         </div>
         <div className={styles.imageContainer}>
-          <Image 
+          <Image
             src="/images/websites.jpg"
-            alt="Blog Post Image" 
-            fill={true} 
-            className={styles.image} 
+            alt="Blog Post Image"
+            fill={true}
+            className={styles.image}
           />
         </div>
       </div>
