@@ -28,7 +28,7 @@ const Dashboard = () => {
   // }, []);
 
   const session = useSession();
-  console.log(session);
+  // console.log(session);
 
   const fetcher = (...args: [RequestInfo, RequestInit?]) => fetch(...args).then(res => res.json());
 
