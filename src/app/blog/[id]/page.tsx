@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./page.module.css";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { get } from "http";
 
 // Define the type for the params
 interface BlogPostParams {
@@ -30,6 +31,15 @@ async function getData(id: string): Promise<PostData> {
   }
 
   return res.json();
+}
+
+// Dynamic meta data
+export async function generateMetadata({ params }: BlogPostParams) {
+  const post = await getData(params.id);
+  return {
+    title: post.title,
+    description: post.desc
+  }
 }
 
 // Make the component async and properly type the params
